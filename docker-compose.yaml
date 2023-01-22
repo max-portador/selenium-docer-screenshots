@@ -1,0 +1,42 @@
+version: '3'
+services:
+  selenium:
+    image: selenium/hub:latest
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    restart: always
+  chrome:
+    image: selenium/node-chrome
+    shm_size: 2gb
+    depends_on:
+      - selenium
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    restart: always
+  app:
+    build: 
+      context: .
+    restart: always
+    volumes:
+      - "./app:/app"
+    ports: 
+      - "4000:4000"
+    environment:
+      - SELENIUM_URL=http://selenium-hub
+    depends_on:
+      - selenium
+      - chrome
+  web:
+    build: ./nginx
+    ports: 
+      - "80:80"
+    volumes:
+      - "./app/screenshots:/images"
+    depends_on:
+      - app
+    restart: always
