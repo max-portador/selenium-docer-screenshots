@@ -2,8 +2,7 @@ import os
 import shutil
 import json
 import uvicorn
-from fastapi import APIRouter, FastAPI
-from fastapi.routing import APIRoute
+from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from concurrent.futures import ThreadPoolExecutor
@@ -21,6 +20,7 @@ with open('config.json', 'r', encoding='utf-8') as f:
 app = FastAPI()
 
 origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -44,15 +44,15 @@ def clear_static():
         shutil.rmtree(static_path)
     os.makedirs(static_path)
 
-
+@app.get("/ping")
 async def ping() -> dict:
     return {"Success": True}
 
-
+@app.get("/")
 async def mainpage() -> str:
     return "YOU ARE ON THE MAIN PAGE"
 
-
+@app.get("/files")
 async def files() -> dict:
     res = {}
     files = os.scandir(os.path.join(os.getcwd(), static_path))
@@ -72,15 +72,6 @@ async def files() -> dict:
                     res[key].sort()
 
     return res
-
-
-routes = [
-    APIRoute(path="/ping", endpoint=ping, methods=["GET"]),
-    APIRoute(path="/", endpoint=mainpage, methods=["GET"]),
-    APIRoute(path="/files", endpoint=files, methods=["GET"]),
-]
-
-app.include_router(APIRouter(routes=routes))
 
 @app.get("/start")
 async def start(days: int = 3) -> dict:
