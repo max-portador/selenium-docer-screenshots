@@ -21,6 +21,7 @@ services:
   app:
     build: 
       context: .
+    container_name: back
     restart: always
     volumes:
       - "./app:/app"
@@ -36,7 +37,16 @@ services:
     ports: 
       - "80:80"
     volumes:
-      - "./app/screenshots:/images"
+      - "./react_build:/ui"
     depends_on:
       - app
+      # - frontend
     restart: always
+
+  # frontend:
+  #   build: ./frontend
+  #   volumes:
+  #     - "./react_build:/build"
+  #   depends_on:
+  #     - app
+  #   restart: always

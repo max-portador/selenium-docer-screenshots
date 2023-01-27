@@ -2,3 +2,6 @@
 app/screenshots
 app/images.zip
 .venv
+frontend/node_modules
+frontend/build
+react_build

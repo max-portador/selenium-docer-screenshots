@@ -18,6 +18,7 @@ with open('config.json', 'r', encoding='utf-8') as f:
     configs = json.load(f)
 
 app = FastAPI()
+app.state.selenium_status = 'free'
 
 origins = ["*"]
 
@@ -37,6 +38,7 @@ def run_driver(days):
                                 params=params,
                                 fInterval=days)
         driver.launch_driver()
+    app.state.selenium_status = 'free'
 
 
 def clear_static():
@@ -75,9 +77,13 @@ async def files() -> dict:
 
 @app.get("/start")
 async def start(days: int = 3) -> dict:
-    clear_static()
-    executor.submit(run_driver, days)
-    return {"Selenium": "Start"}
+    if app.state.selenium_status == 'free':
+        app.state.selenium_status = 'busi'
+        clear_static()
+        executor.submit(run_driver, days)
+        return {"Selenium": "Start"}
+    else: 
+        return {"Selenium": "Still working"}
 
 
 @app.get("/zip")
