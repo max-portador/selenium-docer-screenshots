@@ -8,7 +8,7 @@ import { useAppDispatch } from 'shared/lib/hooks/useAppDispatch';
 export type ReducersList = {
     [name in StateSchemaKey]?: Reducer<NonNullable<StateSchema[name]>>
 }
-type ReducersListEntry = [StateSchemaKey, Reducer]
+// type ReducersListEntry = [StateSchemaKey, Reducer]
 
 interface DynamicModuleLoaderProps extends PropsWithChildren {
     reducers: ReducersList,
@@ -23,7 +23,7 @@ const DynamicModuleLoader: FC<DynamicModuleLoaderProps> = (props) => {
     } = props;
 
     const dispatch = useAppDispatch();
-    const store = useStore() as ReduxStoreWithManager;
+    const store = useStore() as unknown as ReduxStoreWithManager;
 
     useEffect(() => {
         const mountedReducers = store.reducerManager.getReducerMap();

@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
       "outDir": "./dist/",
-      "noImplicitAny": true,
+      "noImplicitAny": false,
       "module": "esnext",
       // в какой стандарт буде компилироваться
       "target": "es5",
       "jsx": "react-jsx",
       "allowJs": true,
+      "strict": false,
       "moduleResolution": "node",
       /// позволяет работать с пакетами CommonJS (require) как с обычными пакетами через import
       "baseUrl": ".",

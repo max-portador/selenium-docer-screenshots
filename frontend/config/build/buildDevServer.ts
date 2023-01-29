@@ -6,6 +6,6 @@ export function buildDevServer(options: BuildOptions): DevServerConfiguration {
         port: options.port,
         open: true, // автоматически открывать страницу в браузере после сборки
         historyApiFallback: true, // позволяет проксировать запросы через index.html,
-        hot: true,
+        allowedHosts: ['*'],
     };
 }

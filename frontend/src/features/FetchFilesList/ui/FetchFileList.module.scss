@@ -1,0 +1,32 @@
+.fetchFileList {
+    position: relative;
+}
+
+.filenames {
+    margin-top: 16px;
+    max-height: 700px;
+    overflow-y: scroll;
+    min-width: 150px;
+}
+
+.filename {
+    padding: 3px 6px;
+    &:hover:not(.selectedFile){
+        background-color: var(--card-bg);
+    }
+}
+
+.selectedFile {
+    background-color: var(--inverted-bg-color);
+    color: var(--inverted-primary-color);
+}
+
+.image {
+    border: 2px solid;
+    position: absolute;
+    margin-top: 16px;
+    margin-left: 200px;
+    height: 700px;
+    object-fit: scale-down;
+    border-radius: 5px;
+}

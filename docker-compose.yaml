@@ -10,6 +10,7 @@ services:
     restart: always
   chrome:
     image: selenium/node-chrome
+    container_name: chrome
     shm_size: 2gb
     depends_on:
       - selenium
@@ -33,20 +34,22 @@ services:
       - selenium
       - chrome
   web:
+    container_name: nginx
     build: ./nginx
     ports: 
       - "80:80"
     volumes:
-      - "./react_build:/ui"
+      - "./app/screenshots:/images"
     depends_on:
       - app
-      # - frontend
+      - frontend
     restart: always
 
-  # frontend:
-  #   build: ./frontend
-  #   volumes:
-  #     - "./react_build:/build"
-  #   depends_on:
-  #     - app
-  #   restart: always
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - app
+    restart: always
