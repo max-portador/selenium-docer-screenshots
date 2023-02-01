@@ -1,0 +1,5 @@
+docker-compose up -d --no-deps --build app
+docker-compose stop && docker-compose up  --build
+source .venv/bin/activate
+docker exec -it nginx bash
+docker rm $(docker ps -a -q)

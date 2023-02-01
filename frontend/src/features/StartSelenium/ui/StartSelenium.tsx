@@ -1,13 +1,13 @@
-import axios from "axios"
-import { useMemo, useState } from "react"
 import { Button } from "shared/ui/Button"
 import { Text } from "shared/ui/Text"
 import { HStack, VStack } from "shared/ui/Stack"
 import { Select } from "shared/ui/Select"
-
-type ServerResponse = {
-    Selenium: string
-}
+import { useAppDispatch } from "shared/lib/hooks/useAppDispatch"
+import { useSelector } from "react-redux"
+import { getSeleniumParamsDays, getSeleniumParamsError, getSeleniumParamsServices, getSeleniumParamsStatus } from "../model/selectors/seleniumParamsSelectors"
+import { startSelenium } from "../model/services/startSelenium"
+import { seleniumParamsActions } from "../model/slices/seleniumParametersSlice"
+import { CheckBox } from "./Checkbox"
 
 const options = Array(10).fill(1).map((_, i) => ({ value: String(i + 1) }))
 
@@ -25,28 +25,27 @@ const mapDaysSuffix = (days: number) => {
 }
 
 export const StartSelenium = () => {
-    const [response, setResponse] = useState<ServerResponse | undefined>()
-    const [days, setDays] = useState<number>(3)
-    const [error, setError] = useState<string | undefined>()
+    const dispatch = useAppDispatch();
+    const days = useSelector(getSeleniumParamsDays)
+    const services = useSelector(getSeleniumParamsServices)
+    const error = useSelector(getSeleniumParamsError)
+    const status = useSelector(getSeleniumParamsStatus)
 
     const handleClick = async () => {
-        try {
-            const res = await axios<ServerResponse>(__API__ + `/start?days=${days}`)
-            setResponse(res.data)
-        }
-        catch (e) {
-            setError(e?.message ?? e);
-            setResponse(undefined)
-        }
+        dispatch(startSelenium())
     }
 
     const handleSelect = (value: string) => {
-        setDays(Number(value))
+        dispatch(seleniumParamsActions.setDays(Number(value)))
     }
 
     return (
         <HStack max gap={32} align='start'>
-            <Button onClick={handleClick} style={{ width: 200 }}>
+            <Button 
+            onClick={handleClick} 
+            style={{ width: 200 }}
+            disabled={!services.length}
+            >
                 Запустить Selenium
             </Button>
             <Select
@@ -57,7 +56,7 @@ export const StartSelenium = () => {
                 onChange={handleSelect}
             />
             {error && <Text title="Ошибка" text={error} />}
-            {response && <Text text={response.Selenium} />}
-
+            {status && <Text text={status.Selenium} />}
+            <CheckBox />
         </HStack >)
 }

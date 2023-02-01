@@ -1,0 +1,35 @@
+{
+    "ДФО": {
+        "Анадырь": "weather-anadyr-4054",
+        "Благовещенск": "weather-blagoveshchensk-4848",
+        "Владивосток": "weather-vladivostok-4877",
+        "Магадан": "weather-magadan-4063",
+        "Петропавловск-Камчатский": "weather-petropavlovsk-kamchatsky-4907",
+        "Хабаровск": "weather-khabarovsk-4862",
+        "Южно-Сахалинск": "weather-yuzhno-sakhalinsk-4894"
+    },
+    "СФО-УФО": {
+        "Екатеринбург": "weather-yekaterinburg-4517",
+        "Иркутск": "weather-irkutsk-4787",
+        "Красноярск": "weather-krasnoyarsk-4674",
+        "Новосибирск": "weather-novosibirsk-4690",
+        "Челябинск": "weather-chelyabinsk-4565"
+    },
+    "ЦФО-СЗФО": {
+        "Москва": "weather-moscow-4368",
+        "Санкт-Петербург": "weather-sankt-peterburg-4079",
+        "Белгород": "weather-belgorod-5039",
+        "Мурманск": "weather-murmansk-3903",
+        "Нижний Новгород": "weather-nizhny-novgorod-4355",
+        "Пермь": "weather-perm-4476",
+        "Смоленск": "weather-smolensk-4239"
+    },
+    "ЮФО-СКФО": {
+        "Ростов-на-Дону": "weather-rostov-na-donu-5110",
+        "Краснодар": "weather-krasnodar-5136",
+        "Махачкала": "weather-makhachkala-5270",
+        "Севастополь": "weather-sevastopol-5003",
+        "Сочи": "weather-sochi-5233",
+        "Ставрополь": "weather-stavropol-5141"
+    }
+}

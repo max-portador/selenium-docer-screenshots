@@ -10,12 +10,12 @@ import { sortByNumericString } from "shared/lib/sortByNumericString"
 
 type FilesList = Record<string, string[]>
 
-const baseURL = 'http://158.160.23.219'
+const baseURL = __API__
 
 export const FetchFilesList = () => {
     const [files, setFiles] = useState<FilesList>({})
     const [error, setError] = useState<string | undefined>()
-    const [selectedFolder, setSelectedFolder] = useState<string | undefined>('test')
+    const [selectedFolder, setSelectedFolder] = useState<string | undefined>()
     const [selectedFile, setSelectedFiles] = useState<string | undefined>()
 
     const handleClick = async () => {
@@ -39,11 +39,6 @@ export const FetchFilesList = () => {
             tabsValues: Array.from(Object.keys(files)) || []
         }
     }, [files])
-
-    const handleSelectFile = (value: string) => {
-        setSelectedFiles(value.split('.')[0])
-    }
-
 
     return (
         <HStack max gap={32} align='start' className={cls.fetchFileList}>
@@ -72,25 +67,29 @@ export const FetchFilesList = () => {
                                 {files[selectedFolder]?.length > 0 &&
                                     <div className={cls.filenames}>
                                         {
-                                            sortByNumericString(files[selectedFolder])?.map((filename) => {
-                                                const isSelected = filename === (selectedFile + '.png')
-                                                return <div
-                                                    className={classNames(
-                                                        cls.filename,
-                                                        { [cls.selectedFile]: isSelected }
-                                                    )}
-                                                    onClick={() => handleSelectFile(filename)} key={filename}
-                                                >
-                                                    {filename} {isSelected && '✔'}
-                                                </div>
-                                            })
+                                            sortByNumericString(files[selectedFolder])
+                                                ?.filter(filename => filename.endsWith('.png'))
+                                                ?.map((filename) => {
+                                                    const isSelected = filename === selectedFile
+                                                    return <div
+                                                        className={classNames(
+                                                            cls.filename,
+                                                            { [cls.selectedFile]: isSelected }
+                                                        )}
+                                                        onClick={() => setSelectedFiles(filename)} key={filename}
+                                                    >
+                                                        {filename} {isSelected && '✔'}
+                                                    </div>
+                                                })
                                         }
                                     </div>
                                 }
                             </VStack>
-                            {selectedFile && <img
-                                className={classNames(cls.image)}
-                                src={`${baseURL}/images/${selectedFolder}/${selectedFile}`} />}
+                            <>
+                                {files[selectedFolder]?.includes(selectedFile) && <img
+                                    className={classNames(cls.image)}
+                                    src={`${baseURL}/images/${selectedFolder}/${selectedFile}`} />}
+                            </>
                         </HStack>
                     </VStack>
                 )

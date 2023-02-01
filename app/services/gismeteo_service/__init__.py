@@ -1,0 +1,1 @@
+from .gismeteo_service import GismeteoService

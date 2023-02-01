@@ -1,16 +1,28 @@
 version: '3'
 services:
   selenium:
-    image: selenium/hub:latest
+    image: selenium/hub:4.7
     container_name: selenium-hub
-    ports:
+    restart: always
+    ports: 
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
-    restart: always
-  chrome:
+  chrome1:
     image: selenium/node-chrome
-    container_name: chrome
+    container_name: chrome1
+    shm_size: 2gb
+    depends_on:
+      - selenium
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    restart: always
+
+  chrome2:
+    image: selenium/node-chrome
+    container_name: chrome2
     shm_size: 2gb
     depends_on:
       - selenium
@@ -29,21 +41,19 @@ services:
     ports: 
       - "4000:4000"
     environment:
-      - SELENIUM_URL=http://selenium-hub
+      - SELENIUM_URL=http://selenium:4444
     depends_on:
       - selenium
-      - chrome
-  web:
-    container_name: nginx
-    build: ./nginx
-    ports: 
-      - "80:80"
-    volumes:
-      - "./app/screenshots:/images"
-    depends_on:
-      - app
-      - frontend
-    restart: always
+      # - chrome
+  # web:
+  #   container_name: nginx
+  #   build: ./nginx
+  #   ports: 
+  #     - "80:80"
+  #   depends_on:
+  #     - app
+  #     - frontend
+  #   restart: always
 
   frontend:
     container_name: frontend
@@ -51,5 +61,5 @@ services:
     ports: 
       - "3000:3000"
     depends_on:
-      - app
+      - selenium
     restart: always

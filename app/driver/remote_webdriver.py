@@ -21,9 +21,8 @@ options.add_argument("--enable-automation")
 # options.add_argument("window-size=2000,1400")
 
 
-def get_selenium_driver():
-    return webdriver.Remote(
-        command_executor=f'{SELENIUM_URL}:4444/wd/hub',
-        desired_capabilities={'browserName': 'chrome'},
-        options=options
-    )
+selenium_driver = webdriver.Remote(
+    command_executor=f'{SELENIUM_URL}/wd/hub',
+    desired_capabilities={'browserName': 'chrome'},
+    options=options
+)
