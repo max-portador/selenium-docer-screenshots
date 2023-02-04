@@ -10,7 +10,7 @@ export const startSelenium = createAsyncThunk<ServerResponse, void, ThunkConfig<
         try {
             const days = getSeleniumParamsDays(getState())
             const services = getSeleniumParamsServices(getState())
-            const res = await extra.api.get<ServerResponse>(__API__ + `/start?days=${days}&service=${services.join(',')}`)
+            const res = await extra.api.get<ServerResponse>(`/start?days=${days}&service=${services.join(',')}`)
 
             if (!res.data) {
                 throw new Error("No data");

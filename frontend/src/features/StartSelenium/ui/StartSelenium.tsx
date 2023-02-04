@@ -1,6 +1,6 @@
 import { Button } from "shared/ui/Button"
 import { Text } from "shared/ui/Text"
-import { HStack, VStack } from "shared/ui/Stack"
+import { HStack } from "shared/ui/Stack"
 import { Select } from "shared/ui/Select"
 import { useAppDispatch } from "shared/lib/hooks/useAppDispatch"
 import { useSelector } from "react-redux"
@@ -8,6 +8,10 @@ import { getSeleniumParamsDays, getSeleniumParamsError, getSeleniumParamsService
 import { startSelenium } from "../model/services/startSelenium"
 import { seleniumParamsActions } from "../model/slices/seleniumParametersSlice"
 import { CheckBox } from "./Checkbox"
+import { useEffect } from "react"
+import { ServerResponse } from '../model/types/seleniumParameters'
+import { wsMessageAccept } from "shared/api/ws"
+import { fetchFilesList } from "features/FetchFilesList"
 
 const options = Array(10).fill(1).map((_, i) => ({ value: String(i + 1) }))
 
@@ -31,6 +35,13 @@ export const StartSelenium = () => {
     const error = useSelector(getSeleniumParamsError)
     const status = useSelector(getSeleniumParamsStatus)
 
+    // useEffect(() => {
+    //     wsMessageAccept<ServerResponse>((data) => {
+    //         dispatch(seleniumParamsActions.setStatus(data))
+    //         dispatch(fetchFilesList())
+    //     })
+    // }, [])
+
     const handleClick = async () => {
         dispatch(startSelenium())
     }
@@ -39,12 +50,13 @@ export const StartSelenium = () => {
         dispatch(seleniumParamsActions.setDays(Number(value)))
     }
 
+
     return (
         <HStack max gap={32} align='start'>
-            <Button 
-            onClick={handleClick} 
-            style={{ width: 200 }}
-            disabled={!services.length}
+            <Button
+                onClick={handleClick}
+                style={{ width: 200 }}
+                disabled={!services.length}
             >
                 Запустить Selenium
             </Button>

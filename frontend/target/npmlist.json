@@ -1,0 +1,1 @@
+{"version":"1.0.0","name":"frontend","dependencies":{"@headlessui/react":{"version":"1.7.7"},"@reduxjs/toolkit":{"version":"1.9.2"},"axios":{"version":"1.2.5"},"react-dom":{"version":"18.2.0"},"react-redux":{"version":"8.0.5"},"react-router-dom":{"version":"6.8.0"},"react":{"version":"18.2.0"},"socket.io-client":{"version":"4.5.4"}}}

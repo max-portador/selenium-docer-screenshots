@@ -1,34 +1,25 @@
-import axios from "axios"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useAppDispatch } from "shared/lib/hooks/useAppDispatch"
 import { Button } from "shared/ui/Button"
 import { Text } from "shared/ui/Text"
 import { HStack, VStack } from "shared/ui/Stack"
-import { Tabs } from "shared/ui/Tabs/Tabs"
-import cls from './FetchFileList.module.scss'
 import { classNames } from "shared/lib/classNames/classNames"
-import { sortByNumericString } from "shared/lib/sortByNumericString"
 import { FolderTree } from "shared/ui/FolderTree"
-
-type FilesList = Record<string, string[] | object>
+import { useSelector } from "react-redux"
+import { getFileListData, getFileListError } from "../model/selectors/filesListSelector"
+import { fetchFilesList } from "../model/services/fetchFilesList"
+import cls from './FetchFileList.module.scss'
 
 const baseURL = __API__
 
 export const FetchFilesList = () => {
-    const [files, setFiles] = useState<FilesList>({})
-    const [error, setError] = useState<string | undefined>()
-    const [selectedFolder, setSelectedFolder] = useState<string | undefined>()
+    const files = useSelector(getFileListData)
+    const error = useSelector(getFileListError)
+    const dispatch = useAppDispatch();
     const [selectedFile, setSelectedFile] = useState<string | undefined>()
 
     const handleClick = async () => {
-        try {
-            const res = await axios<FilesList>(__API__ + '/files')
-            setFiles(res.data)
-            setSelectedFolder(Object.keys(res.data)[0])
-        }
-        catch (e) {
-            setError(e?.message ?? e);
-            setFiles({})
-        }
+        dispatch(fetchFilesList())
     }
 
     useEffect(() => {
@@ -41,9 +32,9 @@ export const FetchFilesList = () => {
         }
     }, [files])
 
-    const handleSelect = (path: string) => {
+    const handleSelect = useCallback((path: string) => {
         setSelectedFile(path)
-    }
+    }, [])
 
     return (
         <HStack max gap={32} align='start' className={cls.fetchFileList}>
@@ -58,7 +49,8 @@ export const FetchFilesList = () => {
                             className={cls.filenames}
                             itemsObj={files}
                             onFileSelect={handleSelect}
-                            selectedFile={selectedFile} />
+                            selectedFile={selectedFile}
+                        />
                     )
                 }
             </VStack>

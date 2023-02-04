@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { classNames } from "shared/lib/classNames/classNames";
+import { sortByNumericString } from "shared/lib/sortByNumericString";
 import { Card } from "shared/ui/Card";
 import cls from './FolderTree.module.scss'
 
@@ -34,7 +35,8 @@ export const FolderTree = (props: FolderTreeProps) => {
 
     const renderFolder = (key, folder) => {
         const isExpanded = expanded[key];
-        const files = folder['_images_']?.map(file => renderFile(key, file));
+        const files = folder['_images_'] ?? []
+        const fileComponents = sortByNumericString([...files]).map((file: string) => renderFile(key, file));
         const subFolders = Object.keys(folder)
             .filter(title => title !== '_images_')
             .map((subfolder: string) => {
@@ -61,7 +63,7 @@ export const FolderTree = (props: FolderTreeProps) => {
                 {isExpanded && (
                     <>
                         {subFolders.map(subFolder => subFolder)}
-                        <div className={cls.folderContent}>{files}</div>
+                        <div className={cls.folderContent}>{fileComponents}</div>
                     </>
                 )}
             </div>

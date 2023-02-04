@@ -2,12 +2,14 @@ import {
     AnyAction, CombinedState, EnhancedStore, Reducer, ReducersMapObject,
 } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
+import { FilesListSchema } from 'features/FetchFilesList';
 import { SeleniumParametersSchema } from 'features/StartSelenium';
 import { ScrollSaveSchema } from 'widgets/ScrollSave';
 
 export interface StateSchema {
     scrollSave: ScrollSaveSchema,
     seleniumParameters: SeleniumParametersSchema,
+    filesList: FilesListSchema,
 }
 
 export type StateSchemaKey = keyof StateSchema

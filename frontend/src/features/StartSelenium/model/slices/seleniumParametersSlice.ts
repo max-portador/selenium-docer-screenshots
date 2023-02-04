@@ -17,6 +17,9 @@ export const seleniumParametersSlice = createSlice({
         },
         setServices: (state, action: PayloadAction<SeleniumService[]>) => {
             state.services = action.payload
+        },
+        setStatus: (state, action: PayloadAction<ServerResponse>) => {
+            state.status = action.payload
         }
     },
     extraReducers: (builder) => {

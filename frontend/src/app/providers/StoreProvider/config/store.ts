@@ -1,6 +1,7 @@
 import {
     CombinedState, configureStore, Reducer, ReducersMapObject,
 } from '@reduxjs/toolkit';
+import { fileListReducer } from 'features/FetchFilesList';
 import { seleniumParamsReducer } from 'features/StartSelenium/model/slices/seleniumParametersSlice';
 import { $api } from 'shared/api/api';
 import { scrollSaveSliceReducer } from 'widgets/ScrollSave';
@@ -14,7 +15,8 @@ export function createReduxStore(
     const rootReducer: ReducersMapObject<StateSchema> = {
         ...asyncReducers,
         scrollSave: scrollSaveSliceReducer,
-        seleniumParameters: seleniumParamsReducer
+        seleniumParameters: seleniumParamsReducer,
+        filesList: fileListReducer,
     };
 
     const reducerManager = createReducerManager(rootReducer);
