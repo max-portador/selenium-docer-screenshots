@@ -1,0 +1,13 @@
+.folderContent {
+    margin-left: 8px;
+}
+
+.subfolder {
+    margin-left: 16px;
+}
+
+.selectedFile,
+.expanded {
+    background-color: var(--inverted-bg-color);
+    color: var(--inverted-primary-color);
+}

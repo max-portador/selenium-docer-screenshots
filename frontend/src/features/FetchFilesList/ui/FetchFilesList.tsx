@@ -7,8 +7,9 @@ import { Tabs } from "shared/ui/Tabs/Tabs"
 import cls from './FetchFileList.module.scss'
 import { classNames } from "shared/lib/classNames/classNames"
 import { sortByNumericString } from "shared/lib/sortByNumericString"
+import { FolderTree } from "shared/ui/FolderTree"
 
-type FilesList = Record<string, string[]>
+type FilesList = Record<string, string[] | object>
 
 const baseURL = __API__
 
@@ -16,7 +17,7 @@ export const FetchFilesList = () => {
     const [files, setFiles] = useState<FilesList>({})
     const [error, setError] = useState<string | undefined>()
     const [selectedFolder, setSelectedFolder] = useState<string | undefined>()
-    const [selectedFile, setSelectedFiles] = useState<string | undefined>()
+    const [selectedFile, setSelectedFile] = useState<string | undefined>()
 
     const handleClick = async () => {
         try {
@@ -40,59 +41,33 @@ export const FetchFilesList = () => {
         }
     }, [files])
 
+    const handleSelect = (path: string) => {
+        setSelectedFile(path)
+    }
+
     return (
         <HStack max gap={32} align='start' className={cls.fetchFileList}>
-            <Button onClick={handleClick} style={{ width: 230 }}>
-                Список файлов
-            </Button>
-            {error && <Text title="Ошибка" text={error} />}
-            {
-                getTabsValues.tabsValues.length > 0 && (
-                    <VStack max>
-                        <Tabs
-                            tabs={
-                                getTabsValues.tabsValues
-                                    .map((key) => {
-                                        return {
-                                            value: key,
-                                            content: <>{key} ({files[key].length})</>
-                                        }
-                                    })
-                            }
-                            value={selectedFolder}
-                            onTabClick={setSelectedFolder}
-                        />
-                        <HStack align='start'>
-                            <VStack>
-                                {files[selectedFolder]?.length > 0 &&
-                                    <div className={cls.filenames}>
-                                        {
-                                            sortByNumericString(files[selectedFolder])
-                                                ?.filter(filename => filename.endsWith('.png'))
-                                                ?.map((filename) => {
-                                                    const isSelected = filename === selectedFile
-                                                    return <div
-                                                        className={classNames(
-                                                            cls.filename,
-                                                            { [cls.selectedFile]: isSelected }
-                                                        )}
-                                                        onClick={() => setSelectedFiles(filename)} key={filename}
-                                                    >
-                                                        {filename} {isSelected && '✔'}
-                                                    </div>
-                                                })
-                                        }
-                                    </div>
-                                }
-                            </VStack>
-                            <>
-                                {files[selectedFolder]?.includes(selectedFile) && <img
-                                    className={classNames(cls.image)}
-                                    src={`${baseURL}/images/${selectedFolder}/${selectedFile}`} />}
-                            </>
-                        </HStack>
-                    </VStack>
-                )
-            }
+            <VStack gap={16}>
+                <Button onClick={handleClick} style={{ width: 230 }}>
+                    Список файлов
+                </Button>
+                {error && <Text title="Ошибка" text={error} />}
+                {
+                    getTabsValues.tabsValues.length > 0 && (
+                        < FolderTree
+                            className={cls.filenames}
+                            itemsObj={files}
+                            onFileSelect={handleSelect}
+                            selectedFile={selectedFile} />
+                    )
+                }
+            </VStack>
+            <VStack className={cls.imageWrap}>
+                {selectedFile}
+                {selectedFile && <img
+                    className={classNames(cls.image)}
+                    src={`${baseURL}/images${selectedFile}`} />}
+            </VStack>
+
         </HStack >)
 }

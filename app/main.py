@@ -69,6 +69,20 @@ def clear_static():
     os.makedirs(static_path)
 
 
+def get_files(root=screenshots_dir) -> dict:
+    res = {}
+    files = os.scandir(root)
+    for dir_entry in files:
+        if dir_entry.is_file():
+            key = '_images_'
+            files_list = res.get(key, [])
+            files_list.append(dir_entry.name)
+            res[key] = sorted(files_list)
+        else:
+            res[dir_entry.name] = get_files(dir_entry.path)
+    return res
+
+
 @app.get("/ping")
 async def ping() -> dict:
     return {"Success": True}
@@ -81,24 +95,7 @@ async def mainpage() -> str:
 
 @app.get("/files")
 async def files() -> dict:
-    res = {}
-    files = os.scandir(os.path.join(os.getcwd(), static_path))
-    for file in files:
-        if file.is_file():
-            key = '__'
-            val = res.get(key, [])
-            val.append(file.name)
-            res[key] = sorted(val)
-        else:
-            key = file.name
-            res[key] = []
-            sub_files = os.scandir(file.path)
-            for sf in sub_files:
-                if sf.is_file():
-                    res[key].append(sf.name)
-                    res[key].sort()
-
-    return res
+    return get_files()
 
 
 @app.get("/start")

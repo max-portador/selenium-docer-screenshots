@@ -4,29 +4,30 @@
 
 .filenames {
     margin-top: 16px;
-    max-height: 700px;
+    max-height: 600px;
     overflow-y: scroll;
-    min-width: 150px;
+    width: 250px;
 }
 
 .filename {
     padding: 3px 6px;
-    &:hover:not(.selectedFile){
+
+    &:hover:not(.selectedFile) {
         background-color: var(--card-bg);
     }
 }
 
-.selectedFile {
-    background-color: var(--inverted-bg-color);
-    color: var(--inverted-primary-color);
+.imageWrap {
+    position: absolute;
+    margin-top: 32px;
+    margin-left: 400px;
 }
+
 
 .image {
     border: 2px solid;
-    position: absolute;
-    margin-top: 16px;
-    margin-left: 200px;
-    height: 700px;
-    object-fit: scale-down;
+    height: 600px;
+    width: 100%;
+    object-fit: contain;
     border-radius: 5px;
 }
